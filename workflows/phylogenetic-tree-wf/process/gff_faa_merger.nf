@@ -1,16 +1,17 @@
 process gff_faa_merger {
-    label "ggplot2"
-    publishDir "${params.output}/gff_faa_merge/", mode: 'copy'
+    label "r"
+    publishDir "${params.output}/{name}/gff_faa_merge/", mode: 'copy'
     input:
-        tuple val(species), path(clean_core_alignment)
+        tuple val(name), path(faa), path(gff)
     output:
-        tuple val(species), path("${species}_clean.core.tree.nwk")
+        tuple val(name), path("${name}_anntotaiton_faa_merged.csv")
     script:
         """
-        FastTree -gtr -nt ${clean_core_alignment} > ${species}_clean.core.tree.nwk
+        faa_to_gff_mapper.R ${gff} ${faa}
+        mv anntotaiton_faa_merged.csv ${name}_anntotaiton_faa_merged.csv
         """
     stub:
         """
-        touch ${species}_clean.core.tree.nwk
+        touch ${name}_anntotaiton_faa_merged.csv
         """
 }

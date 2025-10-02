@@ -2,28 +2,42 @@ include { gff_faa_merger } from './process/gff_faa_merger.nf'
 include { snippy } from './process/snippy.nf'
 include { toytree } from './process/toytree.nf'
 include { fasttree } from './process/fasttree.nf'
+include { proteins_of_interest } from './process/proteins_of_interest.nf'
+include { mafft } from './process/mafft.nf'
 
 
 
 
 workflow search_proteins_wf {
-    take:   gff         // val(name), path("${name}_chromosomes.fasta")
-            protein             // val(name), path(fasta), val(species), val(kingdom;family;etc;species)
+    take:   gff_protein         // val(name), path("${name}_chromosomes.fasta")
+                      // val(name), path(fasta), val(species), val(kingdom;family;etc;species)
     main:
+                
+                
 
-            gff_faa_merger(gff,protein)
 
-    // species_groups = chromosomes.join(species)
-    //     .map { it -> tuple(it[0], it[1], it[3]) } // val(name), path(chromosome), val(species)
-    //     .groupTuple(by:2)
-    //     .filter{ it -> it[2] != 'unidentified' } // remove channel with unidentified species
-    //     .filter { it -> it[1].size() > 1 } // remove channels with only one element
-    //     .view{ it -> "🌳 The following species reached tree construction: ${it[2]}"}         
+                // process_extract genes of interest from merged faa-gff file(gff_faa_merger.out) tuple val(name), path(merged), val(params.protein_of_interest)
+                proteins_of_interest(gff_protein)
 
-    snippy(species_groups)
+                proteins_of_interest.out.proteins_of_interest_ch
+                        .subscribe { sample_name, list_file ->
 
-    toytree(fasttree(snippy.out.alignment))   
+                if (list_file.size() == 0) {
+                        error("No ${params.gene_name} found. Please search for another gene")
+                        }
+                }
 
-    emit:   
-    fasttree.out
+                // merge gff and faa files
+                gff_faa_merger(gff_protein)
+
+
+                // mafft takes a folder with *.faa
+                mafft(proteins_of_interest.out)
+
+                collected_metadata = gff_faa_merger.out.map { it -> it[1] }.collect()
+                fasttree(mafft.out, collected_metadata)
+
+                //toytree(fasttree.out)   
+
+    //emit:    fasttree.out
 }

@@ -14,8 +14,8 @@ def startupMSG() {
 
     def gff3_status = params.gff3 ? c_enabled : c_disabled
     def protein_status = params.protein ? c_enabled : c_disabled
-    def gene_status = params.gene ? c_enabled : c_disabled
-    def go_terms_status = params.go_terms ? c_enabled : c_disabled
+    def gene_status = params.gene_name ? params.gene_name : "N/A"
+    
 
     log.info """
 ${c_turquoise}${line} Tree_GP Workflow Information ${line}${c_reset}
@@ -29,8 +29,8 @@ ${c_turquoise}Work Dir:          ${c_reset}${workflow.workDir}
 ${c_turquoise}Inputs:${c_reset}
   GFF3:              ${gff3_status}
   Protein FASTA:     ${protein_status}
-  Gene FASTA:        ${gene_status}
-  GO Terms:          ${go_terms_status}
+  Search For:        ${gene_status}
+  
 
 ${c_turquoise}Cores:             ${c_reset}${params.cores}
 ${c_turquoise}Max Cores:         ${c_reset}${params.max_cores}
@@ -54,12 +54,9 @@ def helpMSG() {
   ${c_yellow}Input options:${c_reset}
     --gff3              Input GFF3 file for gene annotation
     --protein           Input protein FASTA file
-    --gene              Input gene FASTA file
+    --gene_name         name of the gene you want to build a tree for
 
-  ${c_yellow}Search options:${c_reset}
-    --go_terms          File with GO terms to search (requires --gff3, --protein, or --gene)
-    --gene_name         Search for specific gene names (requires --gff3 or --gene)
-    --gene_description  Search for gene descriptions (requires --gff3 or --gene)
+  
 
   ${c_yellow}General options:${c_reset}
     --output            Output directory
@@ -69,10 +66,8 @@ def helpMSG() {
 
   ${c_yellow}Error handling:${c_reset}
     ${c_dim}--profile is WRONG use -profile${c_reset}
-    ${c_dim}No input provided via [--gff3], [--protein], or [--gene]${c_reset}
-    ${c_dim}[--go_terms] requires an input file via [--gff3], [--protein], or [--gene]${c_reset}
-    ${c_dim}[--gene_name] requires an input file via [--gff3] or [--gene]${c_reset}
-    ${c_dim}[--gene_description] requires an input file via [--gff3] or [--gene]${c_reset}
+    ${c_dim}No input provided via [--gff3], [--protein] ${c_reset}
+   
 
   ${c_yellow}Workflow steps:${c_reset}
     1. Search genes of interest (if --gff3 or --gene provided)

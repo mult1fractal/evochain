@@ -1,16 +1,21 @@
 process fasttree {
+    publishDir "${params.output}/fasttree/", mode: 'copy' , pattern: "*"
     label "fasttree"
-    publishDir "${params.output}/phylotrees/", mode: 'copy'
     input:
-        tuple val(species), path(clean_core_alignment)
+        path(alignment)
+        path(metadata)
     output:
-        tuple val(species), path("${species}_clean.core.tree.nwk")
+        path("tree.nwk"), emit: tree_ch
+        path("all_meta_data.csv"), emit: metadata_ch
     script:
         """
-        FastTree -gtr -nt ${clean_core_alignment} > ${species}_clean.core.tree.nwk
+        cat *anntotaiton_faa_merged.csv > all_meta_data.csv
+        export OMP_NUM_THREADS=${task.cpus}
+        FastTree -gtr  ${alignment} > tree.nwk
         """
+
     stub:
         """
-        touch ${species}_clean.core.tree.nwk
+        touch tree.nwk
         """
 }
