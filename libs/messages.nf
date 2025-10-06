@@ -1,5 +1,3 @@
-
-
 // Define color codes
 
 
@@ -49,7 +47,7 @@ def helpMSG() {
   def c_dim = "\033[2m";
   log.info """
   ${c_yellow}Usage example:${c_reset}
-    nextflow run <workflow_name> --gff3 '/path/to/file.gff3' --go_terms '/path/to/go_terms.txt' -profile local
+    nextflow run /path/to/evochain.nf --gff3 '/path/to/file.gff3' --protein '/path/to/go_terms.txt' --gene_name -profile local,docker
 
   ${c_yellow}Input options:${c_reset}
     --gff3              Input GFF3 file for gene annotation

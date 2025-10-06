@@ -16,3 +16,4 @@ process mafft {
 }
 
 // (up to ∼5,000) on a standard desktop computer
+// FFT-NS-1 or FFT-NS-2; for medium-large datasets and accuracy, G-INS-1 is good;

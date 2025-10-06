@@ -4,6 +4,7 @@ include { toytree } from './process/toytree.nf'
 include { fasttree } from './process/fasttree.nf'
 include { proteins_of_interest } from './process/proteins_of_interest.nf'
 include { mafft } from './process/mafft.nf'
+include { nwk_to_json } from './process/nwk_to_json.nf'
 
 
 
@@ -36,6 +37,7 @@ workflow search_proteins_wf {
 
                 collected_metadata = gff_faa_merger.out.map { it -> it[1] }.collect()
                 fasttree(mafft.out, collected_metadata)
+                nwk_to_json(fasttree.out.tree_ch)
 
                 //toytree(fasttree.out)   
 

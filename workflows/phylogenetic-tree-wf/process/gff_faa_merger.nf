@@ -1,6 +1,6 @@
 process gff_faa_merger {
     label "r"
-    publishDir "${params.output}/{name}/gff_faa_merge/", mode: 'copy'
+    publishDir "${params.output}/${name}/gff_faa_merge/", mode: 'copy'
     input:
         tuple val(name), path(faa), path(gff)
     output:
