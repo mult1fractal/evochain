@@ -13,6 +13,7 @@ def startupMSG() {
     def gff3_status = params.gff3 ? c_enabled : c_disabled
     def protein_status = params.protein ? c_enabled : c_disabled
     def gene_status = params.gene_name ? params.gene_name : "N/A"
+    def fasta_compare = params.fasta ? c_enabled : c_disabled
     
 
     log.info """
@@ -28,6 +29,7 @@ ${c_turquoise}Inputs:${c_reset}
   GFF3:              ${gff3_status}
   Protein FASTA:     ${protein_status}
   Search For:        ${gene_status}
+  Fasta comparison:  ${fasta_compare}
   
 
 ${c_turquoise}Cores:             ${c_reset}${params.cores}
@@ -48,19 +50,22 @@ def helpMSG() {
   log.info """
   ${c_yellow}Usage example:${c_reset}
     nextflow run /path/to/evochain.nf --gff3 '/path/to/file.gff3' --protein '/path/to/go_terms.txt' --gene_name -profile local,docker
+    nextflow run /path/to/evochain.nf --fasta '/path/to/file.fasta' -profile local,docker
 
   ${c_yellow}Input options:${c_reset}
     --gff3              Input GFF3 file for gene annotation
     --protein           Input protein FASTA file
     --gene_name         name of the gene you want to build a tree for
+    --fasta             Input FASTA files for comparison (no gene search)
 
+    {c_yellow}NOTE: file.gff3 and file.faa should have the same filename ${c_reset} 
   
 
   ${c_yellow}General options:${c_reset}
     --output            Output directory
     --cores             Number of cores per process${c_dim} Default: ${params.cores} ${c_reset}
     --max_cores         Maximum number of cores to use${c_dim} Default: ${params.max_cores} ${c_reset}
-    --report            Inject a custom report template
+    --help              Show this message and exit
 
   ${c_yellow}Error handling:${c_reset}
     ${c_dim}--profile is WRONG use -profile${c_reset}
@@ -68,12 +73,11 @@ def helpMSG() {
    
 
   ${c_yellow}Workflow steps:${c_reset}
-    1. Search genes of interest (if --gff3 or --gene provided)
-    2. Search proteins of interest (if --protein provided)
-    3. Visualisation of results
+    1. Search genes of interest (if --gff3 --protein and --gene_name provided)
+    2. Align sequences using MAFFT (if --fasta provided)
 
   ${c_blue}Profiles for execution (via -profile):${c_reset}
-    local, docker, singularity, slurm
+    local, docker
 
   """.stripIndent()
 }

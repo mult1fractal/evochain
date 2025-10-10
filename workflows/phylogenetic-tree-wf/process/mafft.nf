@@ -2,9 +2,9 @@ process mafft {
     publishDir "${params.output}/{name}/mafft/", mode: 'copy'
     label 'mafft'
   input:
-    tuple val(name), path(faa) 
+    path(faa) 
   output:
-	path("protein_alignments.msa")
+	  path("protein_alignments.msa")
   script:
 
     """
@@ -13,6 +13,11 @@ process mafft {
     cat faa_files/*.faa > all_proteins.aa
   	mafft --thread ${task.cpus} --auto all_proteins.aa > protein_alignments.msa
     """
+   
+  stub:
+   """
+   touch protein_alignments.msa
+   """
 }
 
 // (up to ∼5,000) on a standard desktop computer

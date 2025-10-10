@@ -17,9 +17,6 @@ process proteins_of_interest {
         touch "${name}_proteins_of_interest.faa"
         fi
 
-        grep -w "${params.gene_name}" ${faa} | cut -d" " -f1 | tr -d '>' > list.txt
-        
-
         """
     stub:
         """

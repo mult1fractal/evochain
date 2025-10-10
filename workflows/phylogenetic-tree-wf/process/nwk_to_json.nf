@@ -4,9 +4,13 @@ process nwk_to_json {
   input:
     path(tree) 
   output:
-	path("*tree.json")
+	path("tree.json")
   script:
     """  
     nwk_to_json.R ${tree} tree.json
     """
+   stub:
+        """
+        touch tree.json
+        """
 }

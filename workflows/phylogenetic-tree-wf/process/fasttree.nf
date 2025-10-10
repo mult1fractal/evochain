@@ -1,6 +1,7 @@
 process fasttree {
     publishDir "${params.output}/fasttree/", mode: 'copy' , pattern: "*"
     label "fasttree"
+    tag "${params.gene_name}"
     input:
         path(alignment)
         path(metadata)
