@@ -8,10 +8,10 @@ process mafft {
   script:
 
     """
-    mkdir faa_files
-    mv ${faa} faa_files/
-    cat faa_files/*.faa > all_proteins.aa
-  	mafft --thread ${task.cpus} --auto all_proteins.aa > protein_alignments.msa
+    # mkdir faa_files
+    # mv ${faa} faa_files/
+    # cat faa_files/*.faa > all_proteins.aa
+  	mafft --thread ${task.cpus} --auto ${faa} > protein_alignments.msa
     """
    
   stub:

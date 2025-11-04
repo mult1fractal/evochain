@@ -49,8 +49,10 @@ def helpMSG() {
   def c_dim = "\033[2m";
   log.info """
   ${c_yellow}Usage example:${c_reset}
-    nextflow run /path/to/evochain.nf --gff3 '/path/to/file.gff3' --protein '/path/to/go_terms.txt' --gene_name -profile local,docker
+    nextflow run /path/to/evochain.nf --gff3 '/path/to/file.gff3' --protein '/path/to/.faa' --gene_name -profile local,docker
     nextflow run /path/to/evochain.nf --fasta '/path/to/file.fasta' -profile local,docker
+
+    gff and faa should have the same filename before extension
 
   ${c_yellow}Input options:${c_reset}
     --gff3              Input GFF3 file for gene annotation

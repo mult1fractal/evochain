@@ -52,6 +52,8 @@ workflow {
    
 
         search_proteins_input_ch = protein_input_ch.join(gff3_input_ch)
+        //search_proteins_input_ch.view()
+
                         
         params.gff3 && params.protein && params.gene_name ? search_proteins_wf(search_proteins_input_ch) : Channel.empty()
 
