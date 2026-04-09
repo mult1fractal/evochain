@@ -35,7 +35,8 @@ workflow search_proteins_wf {
                         // }
                 
                 // merge gff and faa files
-                gff_faa_merger(gff_protein)
+                def lifestyle_file = params.lifestyle_info ? file(params.lifestyle_info) : file("$projectDir/evochain.nf")
+                gff_faa_merger(gff_protein, lifestyle_file)
 
                 remove_duplicate_faa(proteins_of_interest.out.map { it -> it[1] }.collect())
                 mafft(remove_duplicate_faa.out.deduplicated_faa_ch)

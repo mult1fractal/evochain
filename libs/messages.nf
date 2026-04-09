@@ -14,6 +14,7 @@ def startupMSG() {
     def protein_status = params.protein ? c_enabled : c_disabled
     def gene_status = params.gene_name ? params.gene_name : "N/A"
     def fasta_compare = params.fasta ? c_enabled : c_disabled
+    def lifestyle_status = params.lifestyle_info ? c_enabled : c_disabled
     
 
     log.info """
@@ -30,6 +31,7 @@ ${c_turquoise}Inputs:${c_reset}
   Protein FASTA:     ${protein_status}
   Search For:        ${gene_status}
   Fasta comparison:  ${fasta_compare}
+  Lifestyle Info:    ${lifestyle_status}
   
 
 ${c_turquoise}Cores:             ${c_reset}${params.cores}
@@ -50,6 +52,7 @@ def helpMSG() {
   log.info """
   ${c_yellow}Usage example:${c_reset}
     nextflow run /path/to/evochain.nf --gff3 '/path/to/file.gff3' --protein '/path/to/.faa' --gene_name -profile local,docker
+     nextflow run /path/to/evochain.nf --gff3 '/*/*/*.gff3' --protein '/*/*/.faa' --gene_name -profile local,docker
     nextflow run /path/to/evochain.nf --fasta '/path/to/file.fasta' -profile local,docker
 
     gff and faa should have the same filename before extension
@@ -59,6 +62,7 @@ def helpMSG() {
     --protein           Input protein FASTA file
     --gene_name         name of the gene you want to build a tree for
     --fasta             Input FASTA files for comparison (no gene search)
+    --lifestyle_info    Optional CSV file with phage names (column X1/phage_name) and lifestyle info to append to annotations
 
     {c_yellow}NOTE: file.gff3 and file.faa should have the same filename ${c_reset} 
   

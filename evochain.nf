@@ -1,6 +1,8 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+params.lifestyle_info = null
+
 /*
 * Nextflow -- Gene/Protein Tree an Search Workflow
 * Author: mult1fractal

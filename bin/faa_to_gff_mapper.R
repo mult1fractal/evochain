@@ -11,6 +11,7 @@ library(data.table)
  args <- commandArgs(trailingOnly = TRUE)
  bakta_gbff <- args[1]
  faa <- args[2] 
+ lifestyle_csv <- args[3]
 
 
 # input for testing in a docker
@@ -78,4 +79,16 @@ annotation$ct_Domain_un_fun[is.na(annotation$ct_Domain_un_fun)==TRUE] <- 0
 fasta_data$seq_name <- sub(" .*", "", fasta_data$seq_name )
 # Merging
 annotation_merged <- merge(annotation,fasta_data, by.x= "ID", by.y = "seq_name", all=TRUE)
-write.csv(annotation_merged, file = "anntotaiton_faa_merged.csv")
+
+if (!is.na(lifestyle_csv) && lifestyle_csv != "") {
+  if (file.exists(lifestyle_csv)) {
+    lifestyle_data <- read.csv(lifestyle_csv, stringsAsFactors = FALSE)
+    if ("phage_name" %in% colnames(lifestyle_data)) {
+      annotation_merged <- merge(annotation_merged, lifestyle_data, by.x = "X1", by.y = "phage_name", all.x = TRUE)
+    } else {
+      annotation_merged <- merge(annotation_merged, lifestyle_data, by.x = "X1", by.y = 1, all.x = TRUE)
+    }
+  }
+}
+
+write.csv(annotation_merged, file = "anntotaiton_faa_merged.csv", row.names = FALSE)
